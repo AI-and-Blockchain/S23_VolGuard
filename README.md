@@ -3,7 +3,6 @@
 > Mitigate the high volatility of DeFi markets using AI-powered market
 makers.
 
-
 ## Overview
 
 Defi is infamous for having high volatility, in large part due to the
@@ -18,8 +17,19 @@ VolGuard takes in DeFi data from protocols such as Uniswap, and
 generates an off-chain AI prediction of future volatility. Based on that
 prediction, a smart contract system is called to deploy a corresponding 
 strategy to best take advantage of the future possibilities.
+<br/>
 
 ## Architecture
+
+<br/>
+
+## Stack
+
+- [Amberdata](https://amberdata.io/) - A flexible digital asset API with DeFi data out of the box.
+- [Tensorflow](https://tensorflow.org/) - A Python library for building fast, end to end ML models.
+- [Python](https://python.org/) - High level general purpose programming language, popular for ML workloads.
+- [Solidity](https://soliditylang.org/) - Programming language designed for creating smart contracts on Ethereum.
+
 
 ## License
 
