@@ -20,8 +20,8 @@ strategy to best take advantage of the future possibilities.
 <br/>
 
 ## Architecture
-
 <br/>
+<img src="/arch_diagram.png" width="40%"/>
 
 ## Stack
 
