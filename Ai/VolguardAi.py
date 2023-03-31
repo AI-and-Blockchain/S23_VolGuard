@@ -9,7 +9,6 @@ import numpy as np
 import torch
 import parquet
 
-
 #getting data from amberdata files
 dataset = pd.read_csv('../../../Amberdata_historical/ETHUSD.csv', index_col = 'Date', parse_dates=True)
 
