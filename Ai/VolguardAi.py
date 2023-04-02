@@ -15,10 +15,10 @@ print("begging of file test")
 dataset = pd.read_csv("../../historical_files/ETHUSDCdata.csv", index_col = 'timestamp', parse_dates=True)
 print("Dataset loaded")
 #model input values
-num_epochs = 3000 #1000 epochs
-learning_rate = 0.005 #0.001 lr
+num_epochs = 1000 #1000 epochs
+learning_rate = 0.001 #0.001 lr
 input_size = 4 #number of features
-hidden_size = 3 #number of features in hidden state
+hidden_size = 2 #number of features in hidden state
 num_layers = 1 #number of stacked lstm layers
 num_classes = 1 #number of output classes
  
