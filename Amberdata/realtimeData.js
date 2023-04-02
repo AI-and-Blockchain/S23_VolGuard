@@ -1,14 +1,15 @@
+console.log('test')
 const sdk = require('api')('@amberdata-api/v2#fyrizmskyulb1zj');
 const prompt = require('prompt-sync')({sigint: true});
-
+console.log('test')
 let userrequest = false;
 while (!userrequest) {
   
-  let apikey = prompt('Enter API key');
+  let apikey = prompt('Enter API key/n');
  
   sdk.auth(apikey)
 
-  let request = prompt('What current pair data is needed');
+  let request = prompt('What current pair data is needed/n');
  
   if (request == 'DAI_WETH') {
     DAI_WETH();

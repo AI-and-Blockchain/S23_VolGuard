@@ -33,7 +33,7 @@ X_ss = ss.fit_transform(X)
 y_mm = mm.fit_transform(y)
 
 #Creation of training and test sets
-splitsize = 60
+splitsize = 50
 X_train = X_ss[:splitsize, :]
 X_test = X_ss[splitsize:, :]
 y_train = y_mm[:splitsize, :]
