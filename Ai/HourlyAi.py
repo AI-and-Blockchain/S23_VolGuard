@@ -12,13 +12,13 @@ import parquet
 print("begging of file test")
 #getting data from amberdata files
 #Data provided by Amberdata.io
-dataset = pd.read_csv("../../historical_files/ETHUSDCdata.csv", index_col = 'timestamp', parse_dates=True)
+dataset = pd.read_csv("../../historical_files/hourlyETHUSDCdata.csv", index_col = 'timestamp', parse_dates=True)
 print("Dataset loaded")
 #model input values
 num_epochs = 3000 #1000 epochs
 learning_rate = 0.005 #0.001 lr
 input_size = 4 #number of features
-hidden_size = 3 #number of features in hidden state
+hidden_size = 2 #number of features in hidden state
 num_layers = 1 #number of stacked lstm layers
 num_classes = 1 #number of output classes
  
@@ -33,7 +33,7 @@ X_ss = ss.fit_transform(X)
 y_mm = mm.fit_transform(y)
 
 #Creation of training and test sets
-splitsize = 50
+splitsize = 600
 X_train = X_ss[:splitsize, :]
 X_test = X_ss[splitsize:, :]
 y_train = y_mm[:splitsize, :]
@@ -115,7 +115,7 @@ def predict_plot():
     data_predict = mm.inverse_transform(data_predict) #reverse transformation
     dataY_plot = mm.inverse_transform(dataY_plot)
     plt.figure(figsize=(10,6)) #plotting
-    plt.axvline(x=60, c='r', linestyle='--') #size of the training set
+    plt.axvline(x=splitsize, c='r', linestyle='--') #size of the training set
 
     plt.plot(dataY_plot, label='Actuall Data') #actual plot
     plt.plot(data_predict, label='Predicted Data') #predicted plot
