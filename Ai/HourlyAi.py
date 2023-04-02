@@ -7,6 +7,7 @@ import torch.nn as nn
 import pandas as pd
 import numpy as np
 import torch
+import os
 import parquet
 
 print("begging of file test")
@@ -77,8 +78,15 @@ class LSTM1(nn.Module):
         out = self.fc(out) #Final Output
         return out
     
-
-lstm1 = LSTM1(num_classes, input_size, hidden_size, num_layers, X_tensor_train.shape[1]) #our lstm class 
+if os.path.isfile('./saved_models/hourlylstm.pt'):
+    print("model was found")
+    lstm1 = LSTM1(num_classes, input_size, hidden_size, num_layers, X_tensor_train.shape[1])
+    model_state_dict = torch.load('./saved_models/hourlylstm.pt') # loading the dictionary object
+    lstm1.load_state_dict(model_state_dict) # load_state_dict() function takes a dictionary object, NOT a path to a saved object
+    lstm1.eval() # since we need to use the model for inference
+else:
+    print("no saved model found")
+    lstm1 = LSTM1(num_classes, input_size, hidden_size, num_layers, X_tensor_train.shape[1]) #our lstm class 
 
 # Defining loss function, and optimizing parameters
 criterion = torch.nn.MSELoss()    
@@ -127,3 +135,7 @@ train()
 print("Completed training")
 predict_plot()
 print("completed prediciton")
+
+PATH = f'saved_models/hourlylstm.pt'
+torch.save(lstm1.state_dict(), PATH)
+print("model state saved")
