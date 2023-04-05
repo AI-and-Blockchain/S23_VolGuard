@@ -21,7 +21,7 @@ from matplotlib import style
 print("begging of file test")
 #getting data from amberdata files
 #Data provided by Amberdata.io
-dataset = pd.read_csv("/Users/michelleyu/Desktop/Spring2023/CSCI4964/project/min_data.csv", index_col = 'timestamp', parse_dates=True)
+dataset = pd.read_csv("/../min_data.csv", index_col = 'timestamp', parse_dates=True)
 
 
 print("Dataset loaded")
