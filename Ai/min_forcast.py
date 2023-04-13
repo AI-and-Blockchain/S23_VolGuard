@@ -22,7 +22,7 @@ print("begging of file test")
 #getting data from amberdata files
 #Data provided by Amberdata.io
 dataset = pd.read_csv("/../min_data.csv", index_col = 'timestamp', parse_dates=True)
-
+real_dataset = pd.read_csv("/../min_04_01_data.csv",index_col = 'timestamp', parse_dates=True)
 
 print("Dataset loaded")
 print(dataset.columns)
@@ -34,7 +34,7 @@ dataset['PCT_change'] = (dataset['close'] - dataset['open']) / dataset['open'] *
 df = dataset[['close', 'HL_PCT', 'PCT_change', 'volume']]
 forecast_col = 'close'
 df.fillna(value=-99999, inplace=True)
-forecast_out = int(math.ceil(0.1 * len(df)))
+forecast_out = int(math.ceil(0.5 * len(df)))
 
 df['label'] = df[forecast_col].shift(-forecast_out)
 
@@ -56,7 +56,6 @@ print(confidence)
 
 forecast_set = clf.predict(X_lately)
 df['Forecast'] = np.nan
-
 last_date = df.iloc[-1].name
 last_date = datetime.strptime(last_date, '%Y-%m-%d %H:%M:%S %f') 
 last_unix = last_date.timestamp()
@@ -70,7 +69,19 @@ for i in forecast_set:
 
 df['close'].plot()
 df['Forecast'].plot()
+#print(df['Forecast'].tolist())
+
+count = 0
+
+for i in df['Forecast'].tolist():
+    if not (np.isnan(i)):
+        print("{:.2f}".format((real_dataset.iloc[count]["close"]/i) * 100))
+        count+=1
+print(count)
+
+
 plt.legend(loc=4)
 plt.xlabel('Date')
 plt.ylabel('Price')
 plt.show()
+
