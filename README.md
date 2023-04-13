@@ -24,10 +24,10 @@ strategy to best take advantage of the future possibilities.
 <img src="/arch_diagram.png" width="40%"/>
 
 ## Setup
-Create new folder and clone repository into folder using git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
-Within that folder create a new folder called historical_files
-Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
-Run any of the pytorch AI algorithms in the Ai folder to get your prediction
+- Create new folder and clone repository into folder using git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
+- Within that folder create a new folder called historical_files
+- Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
+- Run any of the pytorch AI algorithms in the Ai folder to get your prediction
 
 ## Stack
 
