@@ -33,7 +33,7 @@ strategy that best capitalizes on the anticipated market conditions.
 ## Stack
 
 - [Amberdata](https://amberdata.io/) - A flexible digital asset API with DeFi data out of the box.
-- [Tensorflow](https://tensorflow.org/) - A Python library for building fast, end to end ML models.
+- [PyTorch](https://pytorch.org/) - A Python library for building fast, end to end ML models.
 - [Python](https://python.org/) - High level general purpose programming language, popular for ML workloads.
 - [Solidity](https://soliditylang.org/) - Programming language designed for creating smart contracts on Ethereum.
 
