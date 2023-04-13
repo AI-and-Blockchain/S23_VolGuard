@@ -1,6 +1,6 @@
 # VolGuard ⌱
 
-> Mitigate the high volatility of DeFi markets using AI-powered market
+> Mitigate  high volatility in DeFi markets using AI-powered market
 makers.
 
 ## Overview
@@ -13,10 +13,10 @@ aims to reduce the volatile and sproadic nature of the DeFi markets by
 using ML-driven market maker contracts, which attempt to predict future 
 volatility and brace against it before it occurs.
 
-VolGuard takes in DeFi data from protocols such as Uniswap, and
-generates an off-chain AI prediction of future volatility. Based on that
-prediction, a smart contract system is called to deploy a corresponding 
-strategy to best take advantage of the future possibilities.
+VolGuard ingests DeFi data from protocols such as Uniswap, and
+generates an off-chain AI prediction of future volatility. Based on this 
+prediction, a smart contract system is invoked to deploy a corresponding
+strategy that best capitalizes on the anticipated market conditions.
 <br/>
 
 ## Architecture
@@ -24,10 +24,11 @@ strategy to best take advantage of the future possibilities.
 <img src="/arch_diagram.png" width="40%"/>
 
 ## Setup
-- Create new folder and clone repository into folder using git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
-- Within that folder create a new folder called historical_files
-- Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
-- Run any of the pytorch AI algorithms in the Ai folder to get your prediction
+1. Create new folder and clone repository into folder using:
+ ```git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git```
+2.  Within that folder create a new folder called historical_files
+3.  Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
+4. Run any of the pytorch AI algorithms in the Ai folder to get your prediction
 
 ## Stack
 
