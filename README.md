@@ -46,17 +46,15 @@ pip install scikit-learn torch pandas numpy parquet pyarrow plotly Flask matplot
 ### ML Predictions
 
 
-3. Within that folder create a new folder called historical_files
+3. Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
 
-4. Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
-
-5. Run the app.py file to spin up the local flask instance, wherein the prediction will be shown at URL(/predict).
+4. Run the app.py file to spin up the local flask instance, and make a call to URL(/data) to get latest values or URL(/predict) to get the latest daily volatility prediction.
 
 ### Blockchain Oracle Communication
 
-6. Deploy Oracle/contract/oracle.sol to a testnet of your choice, and copy its address.
+5. Deploy Oracle/contract/oracle.sol to a testnet of your choice, and copy its address.
 
-7. Run Oracle/service/CentralizedOracle.js, feeding in the URL(/predict) and your oracle address in order for that data to be passed to the oracle smart contract.
+6. Run Oracle/service/CentralizedOracle.js, feeding in the URL(/predict) and your oracle address in order for that data to be passed to the oracle smart contract.
 
 ## Stack
 
