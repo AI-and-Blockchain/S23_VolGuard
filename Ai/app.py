@@ -16,13 +16,48 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 from flask import Flask, request, url_for, redirect, render_template, jsonify
+from datetime import datetime, timedelta, date
+import pandas as pd
+import time
+
 
 
 print("begging of file test")
 #getting data from amberdata files
 #Data provided by Amberdata.io
-dataset = pd.read_csv("../hourlyETHUSDCdata.csv", index_col = 'timestamp', parse_dates=True)
+dataset = pd.read_csv("../hourlyETHUSDCdata.csv", index_col='timestamp', parse_dates=True)
 print("Dataset loaded")
+
+
+
+
+def daterange(date1, date2):
+    for n in range(int ((date2 - date1).days)+1):
+        yield date1 + timedelta(n)
+        
+def datetime_range(start=datetime(2023, 3, 6, 0, 0, 0), end=datetime(2023, 4, 9, 23, 0, 0)):
+    span = end - start
+    for i in range((span.days)*24 + 1):
+        yield start + timedelta(hours=i)
+
+def to_date_time(timestamp):
+    datetime_str = time.mktime(timestamp)
+    format = '%Y-%m-%d %H:%M:%S' # The format
+    print(timestamp)
+    dateTime = time.strftime(format, time.gmtime(datetime_str))
+    return dateTime
+
+
+# index_dates = []
+# for date in datetime_range():
+#     dataset = dataset.append(pd.DataFrame([['timestamp', date], ['open', 0], ['high', None], ['low', 0], ['volume', 0], ['close', 0]]))
+# print(datetime_range())
+# dataset['datetime'] = index_dates
+
+# dataset['timestamp'].loc[len(index_dates)] = index_dates
+# dataset_i2 = pd.Index(index_dates)
+
+# dataset.index.append(dataset_i2)
 #model input values
 num_epochs = 100 #1000 epochs
 learning_rate = 0.001 #0.001 lr
@@ -35,25 +70,48 @@ device =  'cpu'
 target_feature="close"
 feature_list=list(dataset.columns.difference([target_feature]))
 
-forecast_amount= 24
-seq_length= 24
+
+# for index in dataset:
+#     print(index)
+#     if index in feature_list:
+#         continue
+#     if index == 'close':
+#         continue
+#     dataset.index = to_date_time(index)
+
+print(dataset)
+forecast_amount= 3
+seq_length= 4
 torch.manual_seed(101)
 target = f"{target_feature}_lead{forecast_amount}"
 
-dataset[target] = dataset[target_feature].shift(-10)
+dataset[target] = dataset[target_feature].shift(0)
+# first_date = dataset['timestamp'].min()
+today = datetime.today()
 
-
+# dataset.set_index('timestamp', inplace=True)
+# idx = pd.date_range(first_date, today, freq='D')
+# df = dataset.reindex(idx)
 # dataset = dataset.iloc[:-10]
 
 
 #Basic data labeling
-test_start_date= "2023-04-05 20:00:00 000"
+test_start_date= "2023-04-01 00:00:00 000"
+forecast_start_date= dataset.index[-seq_length]
 dataset_train= dataset.loc[:test_start_date].copy()
-dataset_test= dataset.loc[test_start_date:].copy()
-forecast_train= dataset.loc[test_start_date:].copy()
-
-forecast_train[target] = forecast_train[target_feature].shift(20)
+dataset_test= dataset.loc[test_start_date:forecast_start_date].copy()
+dataset_forecast= dataset.loc[forecast_start_date:].copy()
+print("dataset_train")
+# print(dataset_train)
+print("dataset_test")
+# print(dataset_test)
+print("dataset_forecast")
+# dataset_forecast[target] = dataset_forecast[target_feature].shift(-4)
+# dataset_forecast[target_feature]=dataset_forecast[target_feature].shift(-4)
+print(dataset_forecast)
+# dataset_forecast[target] = dataset_forecast[target_feature].shift(20)
 print("Test set fraction:", len(dataset_test) / len(dataset_train))
+
 
 
 target_mean = dataset_train[target].mean()
@@ -65,6 +123,7 @@ for c in dataset_train.columns:
 
     dataset_train[c] = (dataset_train[c] - mean) / stdev
     dataset_test[c] = (dataset_test[c] - mean) / stdev
+    dataset_forecast[c] = (dataset_forecast[c] - mean) / stdev
     
 # setting up dataset to work with pytorch dataloader
 class SequenceDataset(Dataset):
@@ -74,7 +133,6 @@ class SequenceDataset(Dataset):
         self.sequence_length = sequence_length
         self.y = torch.tensor(dataframe[target].values).float()
         self.X = torch.tensor(dataframe[features].values).float()
-        print("this is test")
         
 
     def __len__(self):
@@ -95,18 +153,21 @@ class SequenceDataset(Dataset):
 
 train_dataset= SequenceDataset(dataset_train, target=target, features=feature_list, sequence_length= seq_length )
 test_dataset= SequenceDataset(dataset_test, target=target, features=feature_list, sequence_length= seq_length)
-
+forecast_dataset =SequenceDataset(dataset_forecast, target=target, features=feature_list, sequence_length= seq_length)
 
 # Setup the dataloader for the trainer
 train_loader= DataLoader(train_dataset, batch_size=4, shuffle=True)
 test_loader= DataLoader(test_dataset, batch_size=4, shuffle=False)
+forecast_loader= DataLoader(forecast_dataset, batch_size=6, shuffle=False)
 X, y = next(iter(train_loader))
 print("Features shape:", X.shape)
 print("Target shape:", y.shape)
-
-
-
-
+X, y = next(iter(test_loader))
+print("Features shape:", X.shape)
+print("Target shape:", y.shape)
+X, y = next(iter(forecast_loader))
+print("Features shape:", X.shape)
+print("Target shape:", y.shape)
 
 
 class LSTM1(nn.Module):
@@ -184,12 +245,12 @@ def test_model(data_loader, model, loss_function):
     print(f"Test loss: {avg_loss}")
 
 
-print("Untrained test\n--------")
+# print("Untrained test\n--------")
 # test_model(test_loader, lstm1, criterion)
-print()
+# print()
 
 for ix_epoch in range(1):
-    print(f"Epoch {ix_epoch}\n---------")
+    # print(f"Epoch {ix_epoch}\n---------")
     # train_model(train_loader, lstm1, criterion, optimizer=optimizer)
     # test_model(test_loader, lstm1, criterion)
     print()
@@ -198,11 +259,11 @@ for ix_epoch in range(1):
     
 
 def predict(data_loader, model):
-    step = 0
     output = torch.tensor([])
     model.eval()
     with torch.no_grad():
-            for X, _ in data_loader:
+            for X, y in data_loader:
+                
                 # print(step)
                 # print(X.shape)
                 # print(data_loader)
@@ -219,21 +280,54 @@ def predict_step(data_loader, model):
     step = 0
     output = torch.tensor([])
     model.eval()
-    while step <= 100 :
-        with torch.no_grad():
-            for X, _ in data_loader:
+    with torch.no_grad():
+            for X, y in data_loader:
+                # print("INPUT this is the y value INPUT")
+                # print(str((y * target_stdev + target_mean)*1000))
+                # print("INPUT")
+                # print("-------------------------------")
+                # print((X * target_stdev + target_mean)*1000)
+                # print("-------------------------------")
                 # print(step)
                 # print(X.shape)
                 # print(data_loader)
                 # print("this is x in predict")
                 # print(X)
                 y_star = model(X)
-                
-                output = torch.cat((output, y_star), 0)
-                
+                # print("OUTPUT         OUTPUT")
+                # print("this is what model(X) gives")
+                # print(str((y_star * target_stdev + target_mean)*1000))
+                # print("OUTPUT         OUTPUT")
+                output = torch.cat((output, y_star), 0)                
                 step +=1
-    
     return output
+def shift_df(new_value_list, data_set, dataloader, datasequence):
+    return True
+
+forecast_values = []
+
+def forecast(model, data_set, data_sequence, data_loader, forecast_epochs):
+    predicted_values =[]
+    last_val = data_set.iloc[-1,-1]
+    if forecast_epochs >=1:
+        predicted_values = (predict_step(data_loader, model).numpy()* target_stdev + target_mean)
+        
+        for row in predicted_values:
+            # data_set.loc[len(data_set.index)]
+            new_frame=pd.DataFrame ([["2023-04-20 00::00::00", last_val, max(row, last_val), min(row,last_val), 2192817.561562, row ] ])
+            last_val = row
+            data_set.append(new_frame)
+            data_set.drop(index=data_set.index[0], axis=0, inplace=True)
+        # new_datasequence =SequenceDataset(data_set, target=target, features=feature_list, sequence_length= seq_length)
+        new_loader = DataLoader(data_sequence, batch_size=12, shuffle=False)
+        return predicted_values;
+    # concat(forecast(model, data_set.copy(), data_sequence, new_loader))
+        forecast_epochs -=1;
+    return predicted_values
+        
+print("THFJN:WMLCMKWELDML")
+
+
 
 def predict_step2(model):
     step = 0
@@ -241,12 +335,12 @@ def predict_step2(model):
     model.eval()
 
     with torch.no_grad():
-        predictions, _ = model(forecast_train[-forecast_amount:])
+        predictions, _ = model(dataset_forecast[-forecast_amount:])
         print(predictions)
     return predictions
 
-fc_dataset= SequenceDataset(forecast_train, target=target, features=feature_list, sequence_length= 1 )
-forecast_loader = DataLoader(fc_dataset, batch_size=4, shuffle=False)
+# fc_dataset= SequenceDataset(dataset_forecast, target=target, features=feature_list, sequence_length= 1 )
+# forecast_loader = DataLoader(fc_dataset, batch_size=4, shuffle=False)
 
 # def make_predictions_from_dataloader(model, unshuffled_dataloader):
 #   model.eval()
@@ -338,26 +432,34 @@ def n_step_forecast(data: pd.DataFrame, target: str, target2:str, tw: int, n: in
 train_eval_loader = DataLoader(train_dataset, batch_size=4, shuffle=False)
 # n_step_forecast(dataset_test, 'close', 'close_lead24', 24, 2)
 ystar_col = "close forecast"
-forecast_train[ystar_col] =predict(forecast_loader, lstm1)
-def forecast(model, history_data_loader):
-    return null
+
+# def forecast(model, history_data_loader):
+#     return null
 # print(make_predictions_from_dataloader(lstm1, test_loader))
+forecast_values= forecast(lstm1, dataset_forecast, forecast_dataset, forecast_loader, 1)
+dataset_forecast[ystar_col]= forecast_values
+print("this is dataset_forecast[ysar_col]")
+# print(dataset_forecast[ystar_col]* target_stdev + target_mean)
 dataset_train[ystar_col] = predict(train_eval_loader, lstm1).numpy()
+print("this is dataset_train[ysar_col]")
+# print(dataset_train[ystar_col]* target_stdev + target_mean)
 dataset_test[ystar_col] = predict(test_loader, lstm1).numpy()
-print(predict_step(test_loader, lstm1).numpy()* target_stdev + target_mean)
+print("this is dataset_test[ysar_col]")
+# print(dataset_test[ystar_col]* target_stdev + target_mean)
+print(predict_step(forecast_loader, lstm1).numpy()* target_stdev + target_mean)
 
 df_out = pd.concat((dataset_train, dataset_test))[[target, ystar_col]]
 
-tf_out = forecast_train[[target, ystar_col]]
+tf_out = dataset_forecast[[target, ystar_col]]
 
 for c in df_out.columns:
     df_out[c] = df_out[c] * target_stdev + target_mean
 
-print(df_out)
+# print(df_out)
 
 for c in tf_out.columns:
      tf_out[c] = tf_out[c] * target_stdev + target_mean
-print(tf_out)
+# print(tf_out)
 
 print("completed prediciton")
 
@@ -367,14 +469,15 @@ print("model state saved")
 
 def get_volatility_forecast():
         i = 0
-        forecast_data =predict_step(forecast_loader,lstm1)
-        volatility_data = predict_step(test_loader, lstm1).numpy()* target_stdev + target_mean
+        forecast_data = forecast_values
+        print(forecast_data)
+        # volatility_data = predict_step(test_loader, lstm1).numpy()* target_stdev + target_mean
         
         
-        print(volatility_data)
-        size_of_data = len(volatility_data)
+        print(forecast_data)
+        size_of_data = len(forecast_data)
         mean = sum(forecast_data)/len(forecast_data)
-        variance = sum([((x - mean) ** 2) for x in volatility_data]) / len(volatility_data)
+        variance = sum([((x - mean) ** 2) for x in forecast_data]) / len(forecast_data)
         standard_deviation = variance ** 0.5
         
         # volatility_prediction = standard_deviation/
@@ -389,7 +492,7 @@ return_value = ''
 
 app = Flask(__name__)
 app.add_url_rule('/', 'index', (lambda: return_value))
-app.add_url_rule('/predict', 'predict', (lambda: return_value +  get_volatility_forecast()))
+app.add_url_rule('/predict', 'predict', (lambda: get_volatility_forecast()))
 @app.route('/')
 def hello_world():
    return "Hello, World!"
