@@ -46,7 +46,7 @@ pip install scikit-learn torch pandas numpy parquet pyarrow plotly Flask matplot
 ### ML Predictions
 
 
-3. Run either historicalData.js or hourlyHistoricalData.js with node to fill historical_files with csv data
+3. Run hourlyHistorical.py with node to fill historical_files with csv data
 ```
 python3 hourlyHistorical.py
 ```
