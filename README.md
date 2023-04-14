@@ -46,7 +46,10 @@ pip install scikit-learn torch pandas numpy parquet pyarrow plotly Flask matplot
 ### ML Predictions
 
 
-3. Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
+3. Run either historicalData.js or hourlyHistoricalData.js with node to fill historical_files with csv data
+```
+node hourlyHistoricalData.js
+```
 
 4. Run the app.py file to spin up the local flask instance, and make a call to URL(/data) to get latest values or URL(/predict) to get the latest daily volatility prediction.
 
