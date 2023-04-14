@@ -21,7 +21,7 @@ strategy that best capitalizes on the anticipated market conditions.
 
 ## System Vision
 
-THe vision behind VolGuard is to create an easy-to-use predictive market
+The vision behind VolGuard is to create an easy-to-use predictive market
 making system that users can deploy and self-host in a completely decentralized
 mannner, allowing many different users to participate, modify, or create 
 new methods for reducing volatility in DeFi markets.
