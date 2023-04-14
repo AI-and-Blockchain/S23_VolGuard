@@ -19,17 +19,36 @@ from flask import Flask, request, url_for, redirect, render_template, jsonify
 from datetime import datetime, timedelta, date
 import pandas as pd
 import time
-
+import requests
+import csv
+import math
 
 
 print("begging of file test")
 #getting data from amberdata files
 #Data provided by Amberdata.io
-dataset = pd.read_csv("../hourlyETHUSDCdata.csv", index_col='timestamp', parse_dates=True)
+dataset = pd.read_csv("./historical_files/hourlyETHUSDCdata.csv", index_col='timestamp', parse_dates=True)
 print("Dataset loaded")
 
 
+def get_new_data():
+    
 
+    url = "https://web3api.io/api/v2/market/defi/ohlcv/0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640/historical/?exchange=uniswapv3&startDate=2023-03-15&endDate=2023-04-13&timeInterval=hours&format=csv&fields=timestamp%2Copen%2Chigh%2Clow%2Cvolume%2Cclose&timeFormat=human_readable"
+
+    headers = {
+        "accept": "application/json",
+        "x-api-key": ""
+    }
+
+    response = requests.get(url, headers=headers)
+    f = open('./historical_files/hourlyETHUSDCdata.csv', "w")
+    f.write(response.text)
+    f.close()
+    #getting data from amberdata files
+    #Data provided by Amberdata.io
+    dataset = pd.read_csv('./historical_files/hourlyETHUSDCdata.csv', index_col = 'timestamp', parse_dates=True)
+    print("Dataset loaded")
 
 def daterange(date1, date2):
     for n in range(int ((date2 - date1).days)+1):
@@ -80,8 +99,8 @@ feature_list=list(dataset.columns.difference([target_feature]))
 #     dataset.index = to_date_time(index)
 
 print(dataset)
-forecast_amount= 3
-seq_length= 4
+forecast_amount= 12
+seq_length= 12
 torch.manual_seed(101)
 target = f"{target_feature}_lead{forecast_amount}"
 
@@ -479,9 +498,27 @@ def get_volatility_forecast():
         mean = sum(forecast_data)/len(forecast_data)
         variance = sum([((x - mean) ** 2) for x in forecast_data]) / len(forecast_data)
         standard_deviation = variance ** 0.5
+        return  str((standard_deviation)*(math.sqrt(24))/(mean))
+        # volatility_prediction = standard_deviation/
+        
+
+
+def get_volatility_historical():
+        real_data = df_out[target]
+        print(real_data)
+        # volatility_data = predict_step(test_loader, lstm1).numpy()* target_stdev + target_mean
+        
+        
+        print(real_data)
+        size_of_data = len(real_data)
+        mean = sum(real_data)/len(real_data)
+        variance = sum([((x - mean) ** 2) for x in real_data]) / len(real_data)
+        standard_deviation = variance ** 0.5
         
         # volatility_prediction = standard_deviation/
-        return  str((standard_deviation)*size_of_data/(mean))
+        return  str((standard_deviation)*(math.sqrt(24))/(mean))
+        # volatility_prediction = standard_deviation/
+        # return  str((standard_deviation)*size_of_data/(mean))
 
 
 def get_value():
@@ -493,6 +530,7 @@ return_value = ''
 app = Flask(__name__)
 app.add_url_rule('/', 'index', (lambda: return_value))
 app.add_url_rule('/predict', 'predict', (lambda: get_volatility_forecast()))
+app.add_url_rule('/data', 'data', (lambda: get_new_data()))
 @app.route('/')
 def hello_world():
    return "Hello, World!"
