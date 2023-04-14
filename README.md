@@ -24,20 +24,32 @@ strategy that best capitalizes on the anticipated market conditions.
 <img src="/arch_diagram.png" width="40%"/>
 
 ## Setup
+### Installation
 1. Create new folder and clone repository into folder using:
 
 ```
 git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
 ```
 
-2. Install dependdencies via the following pip command:
+2. Install dependencies via the following pip command:
 ```
 pip install scikit-learn torch pandas numpy parquet pyarrow plotly Flask matplotlib
 ```
- 
-3.  Within that folder create a new folder called historical_files
-4.  Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
-5. Run any of the pytorch AI algorithms in the Ai folder to get your prediction
+
+### ML Predictions
+
+
+3. Within that folder create a new folder called historical_files
+
+4. Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
+
+5. Run the app.py file to spin up the local flask instance, wherein the prediction will be shown at URL(/predict).
+
+### Blockchain Oracle Communication
+
+6. Deploy Oracle/contract/oracle.sol to a testnet of your choice, and copy its address.
+
+7. Run Oracle/service/CentralizedOracle.js, feeding in the URL(/predict) and your oracle address in order for that data to be passed to the oracle smart contract.
 
 ## Stack
 
