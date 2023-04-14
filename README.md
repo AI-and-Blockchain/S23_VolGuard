@@ -25,10 +25,19 @@ strategy that best capitalizes on the anticipated market conditions.
 
 ## Setup
 1. Create new folder and clone repository into folder using:
- ```git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git```
-2.  Within that folder create a new folder called historical_files
-3.  Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
-4. Run any of the pytorch AI algorithms in the Ai folder to get your prediction
+
+```
+git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
+```
+
+2. Install dependdencies via the following pip command:
+```
+pip install scikit-learn torch pandas numpy parquet pyarrow plotly Flask matplotlib
+```
+ 
+3.  Within that folder create a new folder called historical_files
+4.  Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
+5. Run any of the pytorch AI algorithms in the Ai folder to get your prediction
 
 ## Stack
 
