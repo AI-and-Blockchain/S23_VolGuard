@@ -19,6 +19,13 @@ prediction, a smart contract system is invoked to deploy a corresponding
 strategy that best capitalizes on the anticipated market conditions.
 <br/>
 
+## System Vision
+
+THe vision behind VolGuard is to create an easy-to-use predictive market
+making system that users can deploy and self-host in a completely decentralized
+mannner, allowing many different users to participate, modify, or create 
+new methods for reducing volatility in DeFi markets.
+
 ## Architecture
 <br/>
 <img src="/arch_diagram.png" width="40%"/>
