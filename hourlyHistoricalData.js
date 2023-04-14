@@ -11,7 +11,7 @@ request(options, function (error, response, body) {
   if (error) throw new Error(error);
 
   console.log(body);
-  fs.writeFile("../../historical_files/hourlyETHUSDCdata.csv", body, "utf-8", (err) => {
+  fs.writeFile("../historical_files/hourlyETHUSDdata.csv", body, "utf-8", (err) => {
     if (err) console.log(err);
     else console.log("Data saved");
   });
