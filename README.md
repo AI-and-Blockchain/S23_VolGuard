@@ -19,25 +19,45 @@ prediction, a smart contract system is invoked to deploy a corresponding
 strategy that best capitalizes on the anticipated market conditions.
 <br/>
 
+## System Vision
+
+The vision behind VolGuard is to create an easy-to-use predictive market
+making system that users can deploy and self-host in a completely decentralized
+mannner, allowing many different users to participate, modify, or create 
+new methods for reducing volatility in DeFi markets.
+
 ## Architecture
 <br/>
 <img src="/arch_diagram.png" width="40%"/>
 
 ## Setup
+### Installation
 1. Create new folder and clone repository into folder using:
 
 ```
 git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
 ```
 
-2. Install dependdencies via the following pip command:
+2. Install dependencies via the following pip command:
 ```
 pip install scikit-learn torch pandas numpy parquet pyarrow plotly Flask matplotlib
 ```
- 
-3.  Within that folder create a new folder called historical_files
-4.  Run either historicalData.js or hourlyhistoricalData.js with node to fill historical_files with csv data
-5. Run any of the pytorch AI algorithms in the Ai folder to get your prediction
+
+### ML Predictions
+
+
+3. Run either historicalData.js or hourlyHistoricalData.js with node to fill historical_files with csv data
+```
+node hourlyHistoricalData.js
+```
+
+4. Run the app.py file to spin up the local flask instance, and make a call to URL(/data) to get latest values or URL(/predict) to get the latest daily volatility prediction.
+
+### Blockchain Oracle Communication
+
+5. Deploy Oracle/contract/oracle.sol to a testnet of your choice, and copy its address.
+
+6. Run Oracle/service/CentralizedOracle.js, feeding in the URL(/predict) and your oracle address in order for that data to be passed to the oracle smart contract.
 
 ## Stack
 
