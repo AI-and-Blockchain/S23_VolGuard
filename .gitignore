@@ -132,3 +132,5 @@ dmypy.json
 .DS_Store
 
 # Node Modules
+node_modules/
+frontend/node_modules/
