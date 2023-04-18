@@ -20,8 +20,8 @@ function DeploymentForm() {
   const [selectedStrategy, setSelectedStrategy] = React.useState(StrategyOptions[0]);
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
+    <div className="container mx-auto max-w-4xl px-4">
+      <div className="bg-white rounded-lg  shadow-lg p-6 mt-8">
         <h2 className="text-xl font-semibold mb-4">Deploy</h2>
         <div className="grid grid-cols-1 gap-10">
           <Dropdown

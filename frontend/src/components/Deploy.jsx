@@ -24,7 +24,7 @@ export default function Deploy() {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className="mt-2">
+        <Tab.Panels className="mt-4">
           <Tab.Panel>
             <DeploymentForm />
           </Tab.Panel>
