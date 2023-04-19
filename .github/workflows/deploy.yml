@@ -20,6 +20,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+      
+      - name: Install Vite globally
+        run: npm install -g vite
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
