@@ -18,6 +18,17 @@ const WalletConnect = () => {
       const provider = await web3Modal.connect();
       const web3 = new Web3(provider);
   
+      // Check if the connected network is Goerli testnet
+      const networkId = await web3.eth.net.getId();
+      if (networkId !== 5) {
+        // Display an error modal or message to inform the user to switch to the Goerli testnet
+        // Disconnect the wallet provider
+        await web3Modal.clearCachedProvider();
+        await provider.disconnect?.();
+  
+        return;
+      }
+  
       const accounts = await web3.eth.getAccounts();
       setAccount(accounts[0]);
       setConnected(true);
@@ -26,6 +37,8 @@ const WalletConnect = () => {
       // You can update the UI with the error message or a user-friendly message here.
     }
   };
+  
+  
   
 
   return (
