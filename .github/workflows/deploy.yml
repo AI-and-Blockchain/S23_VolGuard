@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: production-files
-          path: ./frontend/dist/S23_VolGuard
+          path: ./frontend/dist/
 
 
   deploy:
