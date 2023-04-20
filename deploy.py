@@ -12,3 +12,6 @@ def main():
 		print(f"Transaction hash: {tx.hash}")
 	my_contract = Contract.from_abi("contracts", "oracle.sol", Accounts[0])
 	my_contract.deploy({'from': Accounts[0]})
+	print("test")
+
+main()
