@@ -28,7 +28,7 @@ new methods for reducing volatility in DeFi markets.
 
 ## Architecture
 <br/>
-<img src="/arch_diagram.png" width="40%"/>
+<img src="/architecture.png"/>
 
 ## Getting started
 ### Metamask
@@ -51,7 +51,7 @@ Then hit deploy, and check your latest activity on Etherscan.io to find your con
 
 You can now fund the contract with whatever amount of ETH you would like, and the contract will automatically update your position based on your selected model's predictions
 ## Self hosting
- 
+To host the backend locally 
 
 
 ## User stories
