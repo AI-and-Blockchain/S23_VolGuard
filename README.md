@@ -30,10 +30,23 @@ new methods for reducing volatility in DeFi markets.
 <br/>
 <img src="/arch_diagram.png" width="40%"/>
 
-## Setup
+## Getting started
 ### Metamask
 
 Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask) and download metamask that works with your browser. 
+
+Go to https://ai-and-blockchain.github.io/S23_VolGuard/
+
+While logged into the Metamask extension, press connect wallet in the top right corner
+<img src="/connectwallet.png"/>
+Then select your datasource, Ai model to use, and strategy
+<img src="/selectmodels.png"/>
+Then hit deploy, and check your latest activity on Etherscan.io to find your contract
+<img src="/gotoetherscan.png"/>
+
+## Self hosting
+ 
+
 
 ## User stories
 [VolGuard](https://ai-and-blockchain.github.io/S23_VolGuard/)
