@@ -38,12 +38,18 @@ Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Ge
 Go to https://ai-and-blockchain.github.io/S23_VolGuard/
 
 While logged into the Metamask extension, press connect wallet in the top right corner
+
 <img src="/connectwallet.png"/>
+
 Then select your datasource, Ai model to use, and strategy
+
 <img src="/selectmodels.png"/>
+
 Then hit deploy, and check your latest activity on Etherscan.io to find your contract
+
 <img src="/gotoetherscan.png"/>
 
+You can now fund the contract with whatever amount of ETH you would like, and the contract will automatically update your position based on your selected model's predictions
 ## Self hosting
  
 
