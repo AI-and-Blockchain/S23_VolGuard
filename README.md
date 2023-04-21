@@ -31,33 +31,9 @@ new methods for reducing volatility in DeFi markets.
 <img src="/arch_diagram.png" width="40%"/>
 
 ## Setup
-### Installation
-1. Create new folder and clone repository into folder using:
+### Metamask
 
-```
-git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
-```
-
-2. Install dependencies via the following pip command:
-```
-pip install scikit-learn torch pandas numpy parquet pyarrow plotly Flask matplotlib
-```
-
-### ML Predictions
-
-
-3. Run hourlyHistorical.py with node to fill historical_files with csv data
-```
-python3 hourlyHistorical.py
-```
-
-4. Run the app.py file to spin up the local flask instance, and make a call to URL(/data) to get latest values or URL(/predict) to get the latest daily volatility prediction.
-
-### Blockchain Oracle Communication
-
-5. Deploy Oracle/contract/oracle.sol to a testnet of your choice, and copy its address.
-
-6. Run Oracle/service/CentralizedOracle.js, feeding in the URL(/predict) and your oracle address in order for that data to be passed to the oracle smart contract.
+Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask) and download metamask that works with your browser. 
 
 ## Stack
 
