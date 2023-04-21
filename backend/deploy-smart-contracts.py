@@ -12,8 +12,8 @@ assert w3.isConnected()
 
 # Compile the Solidity contract
 compiled_sol = compile_files("./Oracle/contract/oracle.sol", output_values=["abi", "bin-runtime", "bin"],)
-contract_interface = compiled_sol.get("bin")
-
+contract_interface = compiled_sol.get("./mysite/Oracle/contract/oracle.sol:CentralizedOracle")
+contract_bin = contract_interface.get('bin')
 app = Flask(__name__)
 
 @app.route('/deploy', methods=['POST'])
@@ -34,21 +34,22 @@ def deploy_contract():
     model_api_endpoint = model_api_endpoints[selected_model_id]
 
     # Deploy the contract
-    nonce = w3.eth.getTransactionCount(ACCOUNT_ADDRESS)
-    gas_estimate = w3.eth.estimateGas({"from": ACCOUNT_ADDRESS, "data": contract_interface})
+    nonce = w3.eth.get_transaction_count(ACCOUNT_ADDRESS)
+    gas_estimate = w3.eth.estimate_gas({"from": ACCOUNT_ADDRESS, "data": contract_bin})
     transaction = {
-        'from': ACCOUNT_ADDRESS,
-        'data': contract_interface,
-        'gas': gas_estimate,
-        'gasPrice': w3.eth.gasPrice,
-        'nonce': nonce,
-        'chainId': 5  # Goerli testnet chain ID
+      'from': ACCOUNT_ADDRESS,
+      'data': contract_bin,
+      'gas': gas_estimate,
+      'gasPrice': w3.eth.gas_price,
+      'nonce': nonce,
+      'chainId': 5 # Goerli testnet chain ID
     }
-    signed_txn = w3.eth.account.signTransaction(transaction, PRIVATE_KEY)
-    txn_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    signed_txn = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    txn_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
     # Wait for the transaction receipt
-    transaction_receipt = w3.eth.waitForTransactionReceipt(txn_hash)
+    transaction_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
     contract_address = transaction_receipt['contractAddress']
+    print(f"Contract deployed at address: {contract_address}")
     return {"contract_address": contract_address}
 
 if __name__ == '__main__':
