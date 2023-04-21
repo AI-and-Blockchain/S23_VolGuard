@@ -34,7 +34,7 @@ const StrategyOptions = [{ id: 1, name: "Gammaswap" }];
 const uniswapRouterAddress = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
 const ethAddress = "0x0000000000000000000000000000000000000000";
 const usdcAddress = "0x07865c6e87b9f70255377e024ace6630c1eaa37f";
-const gasEstimate = 12000000;
+const gasEstimate = 4000000;
 
 function DeploymentForm() {
   const [selectedDataSource, setSelectedDataSource] = useState(

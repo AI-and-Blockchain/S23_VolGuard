@@ -18,6 +18,7 @@ app = Flask(__name__)
 
 @app.route('/deploy', methods=['POST'])
 def deploy_contract():
+<<<<<<< Updated upstream
         print("-------------------------------------------------------------------------------------------------------------")
         print("-------------------------------------------------------------------------------------------------------------")
         print("-------------------------------------------------------------------------------------------------------------")
@@ -78,6 +79,43 @@ def deploy_contract():
         contract_address = transaction_receipt['contractAddress']
         print(f"Contract deployed at address: {contract_address}")
         return (contract_address)
+=======
+    data = request.get_json()
+    
+    PRIVATE_KEY = data.get('privatekey')
+    ACCOUNT_ADDRESS = data.get('accountaddr')
+    selected_model_id = data.get('model')
+
+    model_api_endpoints = {
+        1: "https://johnbartleydev.pythonanywhere.com/model1/predict",
+        2: "https://johnbartleydev.pythonanywhere.com/model2/predict",
+        3: "https://johnbartleydev.pythonanywhere.com/model3/predict",
+        4: "https://johnbartleydev.pythonanywhere.com/model4/predict"
+    }
+    contract_abi = compiled_sol.get("abi")
+    CentralizedOracle = w3.eth.contract(abi=contract_abi)
+    model_api_endpoint = model_api_endpoints[selected_model_id]
+
+    # Deploy the contract
+    nonce = w3.eth.get_transaction_count(ACCOUNT_ADDRESS)
+    gas_estimate = w3.eth.estimate_gas({"from": ACCOUNT_ADDRESS, "data": contract_bin})
+    transaction = {
+    'from': ACCOUNT_ADDRESS,
+    'data': CentralizedOracle.constructor(model_api_endpoint).data_in_transaction,
+    'gas': gas_estimate,
+    'gasPrice': w3.eth.gasPrice,
+    'nonce': nonce,
+    'chainId': 5 # Goerli testnet chain ID
+    }
+
+    signed_txn = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    txn_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+    # Wait for the transaction receipt
+    transaction_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    contract_address = transaction_receipt['contractAddress']
+    print(f"Contract deployed at address: {contract_address}")
+    return {"contract_address": contract_address}
+>>>>>>> Stashed changes
 
 if __name__ == '__main__':
     app.run()
