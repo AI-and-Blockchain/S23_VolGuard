@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Web3Modal from "web3modal";
 import Web3 from "web3";
-import { Wallet } from '@heroicons/react/20/solid';
-
+import WalletContext from "./WalletContext";
 
 const WalletConnect = () => {
-  const [connected, setConnected] = useState(false);
-  const [account, setAccount] = useState("");
+  const { connected, setConnected, account, setAccount } = useContext(WalletContext);
 
   const connectWallet = async () => {
     try {
@@ -37,9 +35,6 @@ const WalletConnect = () => {
       // You can update the UI with the error message or a user-friendly message here.
     }
   };
-  
-  
-  
 
   return (
     <button

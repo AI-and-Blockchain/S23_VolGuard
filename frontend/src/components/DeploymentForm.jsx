@@ -1,7 +1,7 @@
-import React from "react";
 import Dropdown from "./Dropdown";
 import axios from 'axios';
-
+import React, { useState, useContext } from "react";
+import WalletContext from "./WalletContext";
 const DataSourceOptions = [{ id: 1, name: "amber-data" }];
 
 const AIModelOptions = [
@@ -13,11 +13,10 @@ const AIModelOptions = [
 
 const StrategyOptions = [{ id: 1, name: "Gammaswap" }];
 
-async function deployContract(accountAddress, privateKey, selectedModel) {
+async function deployContract(accountAddress, selectedModel) {
   try {
     const response = await axios.post('https://johnbartleydev.pythonanywhere.com/deploy', {
       accountaddr: accountAddress,
-      privatekey: privateKey,
       model: selectedModel,
     });
     console.log(response.data);
@@ -25,6 +24,7 @@ async function deployContract(accountAddress, privateKey, selectedModel) {
     console.error(error);
   }
 }
+
 
 function DeploymentForm() {
   const [selectedDataSource, setSelectedDataSource] = React.useState(
@@ -36,11 +36,14 @@ function DeploymentForm() {
   const [selectedStrategy, setSelectedStrategy] = React.useState(
     StrategyOptions[0]
   );
-  const [accountAddress, setAccountAddress] = React.useState("");
-  const [privateKey, setPrivateKey] = React.useState("");
 
+  const { connected, account } = useContext(WalletContext);
   const handleDeploy = () => {
-    deployContract(accountAddress, privateKey, selectedAIModel.id);
+    if (!account) {
+      alert("Please connect your wallet first.");
+      return;
+    }
+    deployContract(account, selectedAIModel.id);
   };
 
   return (
@@ -65,20 +68,6 @@ function DeploymentForm() {
             options={StrategyOptions}
             selectedOption={selectedStrategy}
             setSelectedOption={setSelectedStrategy}
-          />
-          <input
-            className="input border border-gray-400 p-2 mt-4 w-full"
-            type="text"
-            placeholder="Account Address"
-            value={accountAddress}
-            onChange={(e) => setAccountAddress(e.target.value)}
-          />
-          <input
-            className="input border border-gray-400 p-2 mt-4 w-full"
-            type="password"
-            placeholder="Private Key"
-            value={privateKey}
-            onChange={(e) => setPrivateKey(e.target.value)}
           />
         </div>
         <button
