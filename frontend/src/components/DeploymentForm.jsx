@@ -1,49 +1,83 @@
 import Dropdown from "./Dropdown";
-import axios from 'axios';
-import React, { useState, useContext } from "react";
+import axios from "axios";
+import React, { useEffect, useState, useContext } from "react";
 import WalletContext from "./WalletContext";
+import Web3 from "web3";
+import contractAbi from "../contract_files/abi.json";
+import contractBytecode from "../contract_files/bytecode.json";
+
 const DataSourceOptions = [{ id: 1, name: "amber-data" }];
-
-const AIModelOptions = [
-  { id: 1, name: "3 hours" },
-  { id: 2, name: "6 hours (reccommended)" },
-  { id: 3, name: "12 hours " },
-  { id: 4, name: "24 hours " },
+const OracleAddressOptions = [
+  { id: 1, name: "3 hours", address: "0x2088c6c71c7e2609a98bFaf89AC5Ed618518Da74" },
+  { id: 2, name: "6 hours (reccommended)", address: "0xSimpleOracleAddress2" },
+  { id: 3, name: "12 hours", address: "0xSimpleOracleAddress3" },
+  { id: 4, name: "24 hours", address: "0xSimpleOracleAddress4" },
 ];
-
 const StrategyOptions = [{ id: 1, name: "Gammaswap" }];
 
-async function deployContract(accountAddress, selectedModel) {
-  try {
-    const response = await axios.post('https://johnbartleydev.pythonanywhere.com/deploy', {
-      accountaddr: accountAddress,
-      model: selectedModel,
-    });
-    console.log(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-
 function DeploymentForm() {
-  const [selectedDataSource, setSelectedDataSource] = React.useState(
+  const [selectedDataSource, setSelectedDataSource] = useState(
     DataSourceOptions[0]
   );
-  const [selectedAIModel, setSelectedAIModel] = React.useState(
-    AIModelOptions[0]
+  const [selectedAIModel, setSelectedAIModel] = useState(
+    OracleAddressOptions[0]
   );
-  const [selectedStrategy, setSelectedStrategy] = React.useState(
-    StrategyOptions[0]
-  );
+  const [selectedStrategy, setSelectedStrategy] = useState(StrategyOptions[0]);
+  const [web3, setWeb3] = useState(null);
+  const [initialBalance, setInitialBalance] = useState(0);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      setWeb3(new Web3(window.ethereum));
+    }
+  }, []);
+
+  async function deployContract(accountAddress, selectedOracleAddress) {
+    try {
+      if (!web3) {
+        alert("Web3 not detected. Please install MetaMask.");
+        return;
+      }
+
+      // Estimate the gas required to deploy the contract
+      const gasEstimate = await web3.eth.estimateGas({
+        data: contractBytecode,
+      });
+
+      // Get the contract instance
+      const GammaTrader = new web3.eth.Contract(contractAbi);
+
+      // Deploy the contract with the required constructor arguments
+      const deployedContract = await GammaTrader.deploy({
+        data: contractBytecode,
+        arguments: [selectedOracleAddress],
+        value: initialBalanceWei,
+      }).send({
+        from: accountAddress,
+        gas: gasEstimate,
+      });
+    } catch (error) {
+      console.error("Error deploying contract:", error);
+      alert("Contract deployment failed.");
+    }
+  }
 
   const { connected, account } = useContext(WalletContext);
-  const handleDeploy = () => {
+  const handleDeploy = async () => {
     if (!account) {
       alert("Please connect your wallet first.");
       return;
     }
-    deployContract(account, selectedAIModel.id);
+    const balance = await web3.eth.getBalance(account);
+    const initialBalanceWei = web3.utils.toWei(
+      initialBalance.toString(),
+      "ether"
+    );
+    if (web3.utils.toBN(initialBalanceWei).gt(web3.utils.toBN(balance))) {
+      alert("Insufficient balance.");
+      return;
+    }
+    deployContract(account, selectedAIModel.url);
   };
 
   return (
@@ -59,7 +93,7 @@ function DeploymentForm() {
           />
           <Dropdown
             label="AI-model"
-            options={AIModelOptions}
+            options={OracleAddressOptions}
             selectedOption={selectedAIModel}
             setSelectedOption={setSelectedAIModel}
           />
@@ -69,6 +103,22 @@ function DeploymentForm() {
             selectedOption={selectedStrategy}
             setSelectedOption={setSelectedStrategy}
           />
+          <div>
+            <label
+              htmlFor="initial-balance"
+              className="block text-sm font-medium"
+            >
+              Initial balance (ETH)
+            </label>
+            <input
+              type="number"
+              step="any"
+              placeholder="Initial ETH balance"
+              value={initialBalance}
+              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={(e) => setInitialBalance(e.target.value)}
+            />
+          </div>
         </div>
         <button
           type="button"
