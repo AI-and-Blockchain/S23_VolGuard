@@ -28,12 +28,42 @@ new methods for reducing volatility in DeFi markets.
 
 ## Architecture
 <br/>
-<img src="/arch_diagram.png" width="40%"/>
+<img src="/architecture.png"/>
 
-## Setup
+## Getting started
 ### Metamask
 
 Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask) and download metamask that works with your browser. 
+
+Go to https://ai-and-blockchain.github.io/S23_VolGuard/
+
+While logged into the Metamask extension, press connect wallet in the top right corner
+
+<img src="/connectwallet.png"/>
+
+Then select your datasource, Ai model to use, and strategy
+
+<img src="/selectmodels.png"/>
+
+Then hit deploy, and check your latest activity on Etherscan.io to find your contract
+
+<img src="/gotoetherscan.png"/>
+
+You can now fund the contract with whatever amount of ETH you would like, and the contract will automatically update your position based on your selected model's predictions
+## Self hosting
+To host the backend locally first run
+
+git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
+
+Then within the cloned repository run 
+
+pip install -r /backend/requirements.txt
+
+Then once all the pip dependencies are downloaded you can run the flask application with the command
+
+python3 /backend/app.py
+
+
 
 ## User stories
 [VolGuard](https://ai-and-blockchain.github.io/S23_VolGuard/)
