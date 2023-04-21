@@ -35,6 +35,9 @@ new methods for reducing volatility in DeFi markets.
 
 Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask) and download metamask that works with your browser. 
 
+## User stories
+[VolGuard](https://ai-and-blockchain.github.io/S23_VolGuard/)
+
 ## Stack
 
 - [Amberdata](https://amberdata.io/) - A flexible digital asset API with DeFi data out of the box.
