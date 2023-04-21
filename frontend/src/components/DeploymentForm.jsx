@@ -8,12 +8,33 @@ import contractBytecode from "../contract_files/bytecode.json";
 
 const DataSourceOptions = [{ id: 1, name: "amber-data" }];
 const OracleAddressOptions = [
-  { id: 1, name: "3 hours", address: "0x2088c6c71c7e2609a98bFaf89AC5Ed618518Da74" },
-  { id: 2, name: "6 hours (reccommended)", address: "0xSimpleOracleAddress2" },
-  { id: 3, name: "12 hours", address: "0xSimpleOracleAddress3" },
-  { id: 4, name: "24 hours", address: "0xSimpleOracleAddress4" },
+  {
+    id: 1,
+    name: "3 hours",
+    address: "0x0436411B895786d063f5E1F432cba2B5991c0D1C",
+  },
+  {
+    id: 2,
+    name: "6 hours (reccommended)",
+    address: "0x87517E0C222541aC195e321041eE91239CaDe5ec",
+  },
+  {
+    id: 3,
+    name: "12 hours",
+    address: "0xB790452e13FeD72411efc7Dbd5dF305aE950a5eE",
+  },
+  {
+    id: 4,
+    name: "24 hours",
+    address: "0xa888AcaB87f9D775cB09eDE5fDdF5Fb8148b5Ab8",
+  },
 ];
 const StrategyOptions = [{ id: 1, name: "Gammaswap" }];
+
+const uniswapRouterAddress = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
+const ethAddress = "0x0000000000000000000000000000000000000000";
+const usdcAddress = "0x07865c6e87b9f70255377e024ace6630c1eaa37f";
+const gasEstimate = 12000000;
 
 function DeploymentForm() {
   const [selectedDataSource, setSelectedDataSource] = useState(
@@ -32,25 +53,32 @@ function DeploymentForm() {
     }
   }, []);
 
-  async function deployContract(accountAddress, selectedOracleAddress) {
+  async function deployContract(
+    accountAddress,
+    selectedOracleAddress,
+    uniswapRouterAddress,
+    ethAddress,
+    usdcAddress,
+    initialBalanceWei,
+    gasEstimate
+  ) {
     try {
       if (!web3) {
         alert("Web3 not detected. Please install MetaMask.");
         return;
       }
-
-      // Estimate the gas required to deploy the contract
-      const gasEstimate = await web3.eth.estimateGas({
-        data: contractBytecode,
-      });
-
       // Get the contract instance
       const GammaTrader = new web3.eth.Contract(contractAbi);
 
       // Deploy the contract with the required constructor arguments
       const deployedContract = await GammaTrader.deploy({
         data: contractBytecode,
-        arguments: [selectedOracleAddress],
+        arguments: [
+          selectedOracleAddress,
+          uniswapRouterAddress,
+          ethAddress,
+          usdcAddress,
+        ],
         value: initialBalanceWei,
       }).send({
         from: accountAddress,
@@ -58,6 +86,13 @@ function DeploymentForm() {
       });
     } catch (error) {
       console.error("Error deploying contract:", error);
+      console.log("Selected Oracle Address:", selectedOracleAddress);
+      console.log("Uniswap Router Address:", uniswapRouterAddress);
+      console.log("ETH Address:", ethAddress);
+      console.log("USDC Address:", usdcAddress);
+      console.log("Initial Balance (Wei):", initialBalanceWei);
+      console.log("Account Address:", accountAddress);
+      console.log("Gas Estimate:", gasEstimate);
       alert("Contract deployment failed.");
     }
   }
@@ -77,7 +112,15 @@ function DeploymentForm() {
       alert("Insufficient balance.");
       return;
     }
-    deployContract(account, selectedAIModel.url);
+    deployContract(
+      account,
+      selectedAIModel.address,
+      uniswapRouterAddress,
+      ethAddress,
+      usdcAddress,
+      initialBalanceWei,
+      gasEstimate
+    );
   };
 
   return (
