@@ -50,18 +50,7 @@ Then hit deploy, and check your latest activity on Etherscan.io to find your con
 <img src="/gotoetherscan.png"/>
 
 You can now fund the contract with whatever amount of ETH you would like, and the contract will automatically update your position based on your selected model's predictions
-## Self hosting
-To host the backend locally first run
 
-git clone https://github.com/AI-and-Blockchain/S23_VolGuard.git
-
-Then within the cloned repository run 
-
-pip install -r /backend/requirements.txt
-
-Then once all the pip dependencies are downloaded you can run the flask application with the command
-
-python3 /backend/app.py
 
 
 
