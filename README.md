@@ -33,7 +33,7 @@ new methods for reducing volatility in DeFi markets.
 ## Getting started
 ### Metamask
 
-Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask) and download metamask that works with your browser. 
+Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask) and download a version of metamask that works with your browser. 
 
 Go to https://ai-and-blockchain.github.io/S23_VolGuard/
 
