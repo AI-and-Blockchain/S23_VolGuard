@@ -58,7 +58,7 @@ You can now fund the contract with whatever amount of ETH you would like, and th
 - [PyTorch](https://pytorch.org/) - A Python library for building fast, end to end ML models.
 - [Python](https://python.org/) - High level general purpose programming language, popular for ML workloads.
 - [Solidity](https://soliditylang.org/) - Programming language designed for creating smart contracts on Ethereum.
-
+- [React](https://react.dev/) - Frontend web framework for responsive design.
 
 ## License
 
