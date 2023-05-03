@@ -28,7 +28,7 @@ new methods for reducing volatility in DeFi markets.
 
 ## Architecture
 <br/>
-<img src="/architecture.png"/>
+<img src="/readme_images/architecture.png"/>
 
 ## Getting started
 ### Metamask
@@ -37,25 +37,20 @@ Follow this [link](https://support.metamask.io/hc/en-us/articles/360015489531-Ge
 
 Go to https://ai-and-blockchain.github.io/S23_VolGuard/
 
-While logged into the Metamask extension, press connect wallet in the top right corner
+While logged into the Metamask extension, press connect wallet in the top right corner.
 
-<img src="/connectwallet.png"/>
+<img src="/readme_images/connectwallet.png"/>
 
-Then select your datasource, Ai model to use, and strategy
+Then select your datasource, Ai model, and strategy of choice.
 
-<img src="/selectmodels.png"/>
+<img src="/readme_images/selectmodels.png"/>
 
-Then hit deploy, and check your latest activity on Etherscan.io to find your contract
+Then hit deploy, and check your latest activity on [Etherscan.io](https://etherscan.io/) to find your contract.
 
-<img src="/gotoetherscan.png"/>
+<img src="/readme_images/gotoetherscan.png"/>
 
-You can now fund the contract with whatever amount of ETH you would like, and the contract will automatically update your position based on your selected model's predictions
+You can now fund the contract with whatever amount of ETH you would like, and the contract will automatically update your position based on your selected model's predictions.
 
-
-
-
-## User stories
-[VolGuard](https://ai-and-blockchain.github.io/S23_VolGuard/)
 
 ## Stack
 
